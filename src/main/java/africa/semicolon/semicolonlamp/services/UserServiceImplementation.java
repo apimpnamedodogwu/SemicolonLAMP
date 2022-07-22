@@ -2,6 +2,7 @@ package africa.semicolon.semicolonlamp.services;
 
 import africa.semicolon.semicolonlamp.models.Cohort;
 import africa.semicolon.semicolonlamp.models.User;
+import africa.semicolon.semicolonlamp.models.UserType;
 import africa.semicolon.semicolonlamp.repositories.UserRepository;
 import africa.semicolon.semicolonlamp.request.UserRegistrationRequest;
 import africa.semicolon.semicolonlamp.request.UserUpdateRequest;
@@ -21,7 +22,8 @@ public class UserServiceImplementation implements UserService {
     public void changeUserType(String userId, String newType) {
         var existingUser = userRepository.findUserById(userId);
         if (existingUser.isPresent()) {
-            existingUser.get().setUserType(existingUser.get().getUserType());
+            UserType userType = UserType.valueOf(newType);
+            existingUser.get().setUserType(userType);
             userRepository.save(existingUser.get());
             return;
         }
