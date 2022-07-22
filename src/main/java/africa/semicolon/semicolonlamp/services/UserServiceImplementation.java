@@ -6,7 +6,9 @@ import africa.semicolon.semicolonlamp.models.UserType;
 import africa.semicolon.semicolonlamp.repositories.UserRepository;
 import africa.semicolon.semicolonlamp.request.UserRegistrationRequest;
 import africa.semicolon.semicolonlamp.request.UserUpdateRequest;
+import africa.semicolon.semicolonlamp.services.lampExceptions.ExistingEmailException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.InvalidUserIdException;
+import africa.semicolon.semicolonlamp.services.lampExceptions.UserTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,12 @@ public class UserServiceImplementation implements UserService {
     public void changeUserType(String userId, String newType) {
         var existingUser = userRepository.findUserById(userId);
         if (existingUser.isPresent()) {
-            UserType userType = UserType.valueOf(newType);
-            existingUser.get().setUserType(userType);
+            try {
+                UserType userType = UserType.valueOf(newType);
+                existingUser.get().setUserType(userType);
+            } catch (Exception message) {
+                throw new UserTypeException("Oops " + newType + " does not exist!");
+            }
             userRepository.save(existingUser.get());
             return;
         }
@@ -68,6 +74,15 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public void createUser(UserRegistrationRequest request) {
-
+        request.validateRegistrationRequest(request);
+        var existingEmail = userRepository.findUserByEmail(request.getEmail());
+        if (existingEmail.isPresent()) {
+            throw new ExistingEmailException(request.getEmail() + " already exists!");
+        }
+        User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        userRepository.save(user);
     }
 }
