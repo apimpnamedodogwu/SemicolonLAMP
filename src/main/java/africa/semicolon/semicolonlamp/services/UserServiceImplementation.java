@@ -2,14 +2,30 @@ package africa.semicolon.semicolonlamp.services;
 
 import africa.semicolon.semicolonlamp.models.Cohort;
 import africa.semicolon.semicolonlamp.models.User;
+import africa.semicolon.semicolonlamp.repositories.UserRepository;
 import africa.semicolon.semicolonlamp.request.UserRegistrationRequest;
 import africa.semicolon.semicolonlamp.request.UserUpdateRequest;
+import africa.semicolon.semicolonlamp.services.lampExceptions.InvalidUserIdException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class UserServiceImplementation implements UserService{
+@Service
+public class UserServiceImplementation implements UserService {
+
+    @Autowired
+    UserRepository userRepository;
+
     @Override
-    public void changeUserType(String UserId, String newType) {
+    public void changeUserType(String userId, String newType) {
+        var existingUser = userRepository.findUserById(userId);
+        if (existingUser.isPresent()) {
+            existingUser.get().setUserType(existingUser.get().getUserType());
+            userRepository.save(existingUser.get());
+            return;
+        }
+        throw new InvalidUserIdException("User with " + userId + " does not exist!");
 
     }
 
