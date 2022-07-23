@@ -14,9 +14,10 @@ public interface UserService {
 
     List<User> getAllAncestors();
 
-    List<User> getAllNatives();
 
-    List<Cohort> getAllNativesInACohort(String cohortId);
+    List<User> getAllNatives(String type);
+
+    List<User> getAllNativesInACohort(String cohortId);
 
     User getUser(String userId);
 
@@ -24,6 +25,10 @@ public interface UserService {
 
     void deleteUser(String userId);
 
-    void createUser(UserRegistrationRequest request);
+    void createUserNative(UserRegistrationRequest request);
+
+    void createUserElder(UserRegistrationRequest request);
+
+    void createUserAncestor(UserRegistrationRequest request);
 
 }
