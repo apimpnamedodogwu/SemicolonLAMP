@@ -15,7 +15,7 @@ public interface UserService {
     List<User> getAllAncestors();
 
 
-    List<User> getAllNatives(String type);
+    List<User> getAllNatives();
 
     List<User> getAllNativesInACohort(String cohortId);
 

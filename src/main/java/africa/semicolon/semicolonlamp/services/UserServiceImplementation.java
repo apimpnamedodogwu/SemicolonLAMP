@@ -60,16 +60,8 @@ public class UserServiceImplementation implements UserService {
 
 
     @Override
-    public List<User> getAllNatives(String type) {
-        UserType userType = UserType.valueOf(type);
-        List<User> nativeList = new ArrayList<>();
-        var allNatives = userRepository.findUserByUserType(userType);
-        for (User all : allNatives) {
-            if (all.getUserType() == UserType.NATIVE) {
-                nativeList.add(all);
-            }
-        }
-        return nativeList;
+    public List<User> getAllNatives() {
+        return userRepository.findUserByUserType(UserType.NATIVE);
     }
 
     @Override
