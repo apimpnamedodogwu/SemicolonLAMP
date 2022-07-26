@@ -1,6 +1,7 @@
 package africa.semicolon.semicolonlamp.repositories;
 
 
+import africa.semicolon.semicolonlamp.models.Cohort;
 import africa.semicolon.semicolonlamp.models.User;
 import africa.semicolon.semicolonlamp.models.UserType;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -13,6 +14,8 @@ import java.util.Optional;
 public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findUserById(String userId);
     Optional<User> findUserByEmail(String email);
-    List<User> findUserByCohortId(String cohortId);
+    List<User> findUsersByCohort(Cohort cohort);
     List<User> findUserByUserType(UserType userType);
+
+
 }

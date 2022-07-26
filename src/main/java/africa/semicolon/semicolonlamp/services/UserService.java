@@ -11,6 +11,7 @@ public interface UserService {
     void changeUserType(String UserId, String newType);
 
     void updateUserDetails(String userId, UserUpdateRequest request);
+    List<User> getAllElders();
 
     List<User> getAllAncestors();
 

@@ -8,6 +8,7 @@ import africa.semicolon.semicolonlamp.repositories.CohortRepository;
 import africa.semicolon.semicolonlamp.repositories.UserRepository;
 import africa.semicolon.semicolonlamp.request.UserRegistrationRequest;
 import africa.semicolon.semicolonlamp.request.UserUpdateRequest;
+import africa.semicolon.semicolonlamp.services.lampExceptions.CohortException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.ExistingEmailException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.InvalidUserIdException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.UserTypeException;
@@ -54,8 +55,13 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public List<User> getAllElders() {
+        return userRepository.findUserByUserType(UserType.ELDER);
+    }
+
+    @Override
     public List<User> getAllAncestors() {
-        return null;
+        return userRepository.findUserByUserType(UserType.ANCESTOR);
     }
 
 
@@ -66,15 +72,10 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public List<User> getAllNativesInACohort(String cohortId) {
-        var user = userRepository.findUserByCohortId(cohortId);
-        List<User> nativeList = new ArrayList<>();
-        for (User aNative : user) {
-            if (aNative.getUserType() == UserType.NATIVE) {
-                nativeList.add(aNative);
-            }
-        }
-        return nativeList;
-
+        var cohort = cohortRepository.findCohortById(cohortId);
+        if (cohort.isPresent()) {
+            return userRepository.findUsersByCohort(cohort.get());
+        } else throw new CohortException("Cohort with " + cohortId + " does not exist!");
     }
 
     @Override
