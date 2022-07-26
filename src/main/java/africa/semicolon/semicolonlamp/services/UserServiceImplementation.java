@@ -32,6 +32,11 @@ public class UserServiceImplementation implements UserService {
                 orElseThrow(() -> new InvalidUserIdException("User with id " + userId + " does not exist!"));
     }
 
+    private User validateUserEmail(UserRegistrationRequest request) {
+        return userRepository.findUserByEmail(request.getEmail()).
+                orElseThrow(() -> new ExistingEmailException(request.getEmail() + " already exists!"));
+    }
+
     @Override
     public void changeUserType(String userId, String newType) {
         var existingUser = userRepository.findUserById(userId);
@@ -96,11 +101,7 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void deleteUser(String userId) {
         var user = validateUserId(userId);
-        if (Objects.equals(user.getId(), userId)) {
-            userRepository.delete(user);
-            return;
-        }
-        throw new InvalidUserIdException("User with id " + userId + " does not exist!");
+        userRepository.delete(user);
     }
 
     @Override
@@ -111,37 +112,30 @@ public class UserServiceImplementation implements UserService {
             throw new ExistingEmailException(request.getEmail() + " already exists!");
         }
         User user = new User();
-        Cohort cohort = new Cohort();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         user.setUserType(UserType.NATIVE);
-        cohort.setName(cohort.getName());
-        cohort.setStatus(CohortStatus.IN_SESSION);
-        cohort.setLocalDate(LocalDate.now());
-        user.setCohort(cohort);
         userRepository.save(user);
     }
 
     @Override
     public void createUserElder(UserRegistrationRequest request) {
         request.validateRegistrationRequest(request);
-        var existingEmail = userRepository.findUserByEmail(request.getEmail());
-        if (existingEmail.isPresent()) {
-            throw new ExistingEmailException(request.getEmail() + " already exists!");
-        }
-        User user = new User();
-        Cohort cohort = new Cohort();
+        var user = validateUserEmail(request);
+//        var existingEmail = userRepository.findUserByEmail(request.getEmail());
+//        if (existingEmail.isPresent()) {
+//            throw new ExistingEmailException(request.getEmail() + " already exists!");
+//        }
+        user.setFirstName(request.getFirstName());
+
+//        User user = new User();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         user.setUserType(UserType.ELDER);
-        cohort.setName(cohort.getName());
-        cohort.setStatus(CohortStatus.COMPLETED);
-        cohort.setLocalDate(cohort.getLocalDate());
-        user.setCohort(cohort);
         userRepository.save(user);
     }
 
@@ -153,16 +147,11 @@ public class UserServiceImplementation implements UserService {
             throw new ExistingEmailException(request.getEmail() + " already exists!");
         }
         User user = new User();
-        Cohort cohort = new Cohort();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         user.setUserType(UserType.ANCESTOR);
-        cohort.setName(cohort.getName());
-        cohort.setStatus(CohortStatus.COMPLETED);
-        cohort.setLocalDate(cohort.getLocalDate());
-        user.setCohort(cohort);
         userRepository.save(user);
     }
 }
