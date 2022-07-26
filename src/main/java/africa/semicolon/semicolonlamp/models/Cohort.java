@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 
 public class Cohort {
-    private CohortStatus status;
+    private CohortStatus status = CohortStatus.PENDING;
     @Id
     private String id;
     private String name;

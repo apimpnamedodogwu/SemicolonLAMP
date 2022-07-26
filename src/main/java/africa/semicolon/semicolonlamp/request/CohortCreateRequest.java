@@ -1,5 +1,6 @@
 package africa.semicolon.semicolonlamp.request;
 
+import africa.semicolon.semicolonlamp.services.lampExceptions.EmptyFieldException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,6 @@ import java.time.LocalDate;
 public class CohortCreateRequest {
     private String name;
     private LocalDate localDate;
+
+
 }

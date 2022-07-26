@@ -8,7 +8,7 @@ import java.util.List;
 public interface CohortService {
     void changeCohortName(String cohortId, String newName);
 
-    void updateCohortService(String userId, String newStatus);
+    void updateCohortStatus(String cohortId, String newStatus);
 
     List<Cohort> getAllInSessionCohorts();
 
@@ -20,7 +20,7 @@ public interface CohortService {
 
     void createCohort(CohortCreateRequest request);
 
-    List<Cohort> getCohort(String id);
+    Cohort getCohort(String id);
 
     List<Cohort> getAllCohorts();
 }
