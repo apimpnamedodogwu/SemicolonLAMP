@@ -73,10 +73,14 @@ public class CohortServiceImplementation implements CohortService {
         if (request.getName().isEmpty()) {
             throw new EmptyFieldException("Name field cannot be empty!");
         }
+        var existingName = cohortRepository.findCohortByName(request.getName());
+        if (existingName.isPresent()) {
+            throw new CohortException(request.getName() + " already exists!");
+        }
         Cohort cohort = new Cohort();
-        cohort.setName(cohort.getName());
+        cohort.setName(request.getName());
         cohort.setStatus(cohort.getStatus());
-        cohort.setLocalDate(cohort.getLocalDate());
+        cohort.setLocalDate(request.getLocalDate());
         cohortRepository.save(cohort);
     }
 
