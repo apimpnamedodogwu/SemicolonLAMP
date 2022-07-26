@@ -1,7 +1,6 @@
 package africa.semicolon.semicolonlamp.services;
 
-import africa.semicolon.semicolonlamp.models.Cohort;
-import africa.semicolon.semicolonlamp.models.CohortStatus;
+
 import africa.semicolon.semicolonlamp.models.User;
 import africa.semicolon.semicolonlamp.models.UserType;
 import africa.semicolon.semicolonlamp.repositories.CohortRepository;
@@ -15,10 +14,8 @@ import africa.semicolon.semicolonlamp.services.lampExceptions.UserTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 
 @Service
 public class UserServiceImplementation implements UserService {
@@ -32,10 +29,6 @@ public class UserServiceImplementation implements UserService {
                 orElseThrow(() -> new InvalidUserIdException("User with id " + userId + " does not exist!"));
     }
 
-    private User validateUserEmail(UserRegistrationRequest request) {
-        return userRepository.findUserByEmail(request.getEmail()).
-                orElseThrow(() -> new ExistingEmailException(request.getEmail() + " already exists!"));
-    }
 
     @Override
     public void changeUserType(String userId, String newType) {
@@ -56,7 +49,16 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public void updateUserDetails(String userId, UserUpdateRequest request) {
-
+        request.validateUserUpdateRequest(request);
+        var existingUser = userRepository.findUserByEmail(request.getEmail());
+        if (existingUser.isPresent()) {
+            existingUser.get().setFirstName(request.getFirstName());
+            existingUser.get().setLastName(request.getLastName());
+            existingUser.get().setEmail(request.getEmail());
+            userRepository.save(existingUser.get());
+            return;
+        }
+        throw new ExistingEmailException(request.getEmail() + " already exists!");
     }
 
     @Override
@@ -123,14 +125,11 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void createUserElder(UserRegistrationRequest request) {
         request.validateRegistrationRequest(request);
-        var user = validateUserEmail(request);
-//        var existingEmail = userRepository.findUserByEmail(request.getEmail());
-//        if (existingEmail.isPresent()) {
-//            throw new ExistingEmailException(request.getEmail() + " already exists!");
-//        }
-        user.setFirstName(request.getFirstName());
-
-//        User user = new User();
+        var existingEmail = userRepository.findUserByEmail(request.getEmail());
+        if (existingEmail.isPresent()) {
+            throw new ExistingEmailException(request.getEmail() + " already exists!");
+        }
+        User user = new User();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
@@ -142,11 +141,12 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void createUserAncestor(UserRegistrationRequest request) {
         request.validateRegistrationRequest(request);
+        User user = new User();
         var existingEmail = userRepository.findUserByEmail(request.getEmail());
         if (existingEmail.isPresent()) {
             throw new ExistingEmailException(request.getEmail() + " already exists!");
         }
-        User user = new User();
+
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());

@@ -31,7 +31,6 @@ public class UserRegistrationRequest {
             throw new EmptyFieldException("Last name field cannot be empty!");
         }
 
-
         if (request.getEmail().isEmpty()) {
             throw new EmptyFieldException("Email field cannot be empty!");
         }
