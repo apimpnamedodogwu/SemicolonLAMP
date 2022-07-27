@@ -4,7 +4,6 @@ import africa.semicolon.semicolonlamp.request.UserRegistrationRequest;
 import africa.semicolon.semicolonlamp.request.UserUpdateRequest;
 import africa.semicolon.semicolonlamp.services.UserService;
 import africa.semicolon.semicolonlamp.services.lampExceptions.CohortException;
-import africa.semicolon.semicolonlamp.services.lampExceptions.EmptyFieldException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.ExistingEmailException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.InvalidUserIdException;
 import lombok.extern.slf4j.Slf4j;
