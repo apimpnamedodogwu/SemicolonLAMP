@@ -94,7 +94,7 @@ public class UserController {
     public ResponseEntity<?> createANative(@RequestBody UserRegistrationRequest request) {
         try {
             userService.createUserNative(request);
-            var display = "Congratulations, you are now a native!";
+            var display = "Congratulations, welcome to hell!";
             return new ResponseEntity<>(display, HttpStatus.CREATED);
         } catch (ExistingEmailException message) {
             var displayMessage = message.getMessage();
