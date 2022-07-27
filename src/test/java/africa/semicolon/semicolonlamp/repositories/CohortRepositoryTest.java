@@ -55,7 +55,7 @@ class CohortRepositoryTest {
     }
 
     @Test
-    void findCohortByName() {
+    void testThatCohortCanBeFoundByName() {
         Cohort cohortOne = new Cohort();
         cohortOne.setName("Avengers");
         cohortOne.setStatus(CohortStatus.PENDING);
