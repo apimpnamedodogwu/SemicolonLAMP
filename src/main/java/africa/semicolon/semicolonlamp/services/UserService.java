@@ -1,6 +1,5 @@
 package africa.semicolon.semicolonlamp.services;
 
-import africa.semicolon.semicolonlamp.models.Cohort;
 import africa.semicolon.semicolonlamp.models.User;
 import africa.semicolon.semicolonlamp.request.UserRegistrationRequest;
 import africa.semicolon.semicolonlamp.request.UserUpdateRequest;
