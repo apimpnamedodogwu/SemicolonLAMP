@@ -22,6 +22,7 @@ public class CohortServiceImplementation implements CohortService {
         var cohort = cohortRepository.findCohortById(cohortId);
         if (cohort.isPresent()) {
             cohort.get().setName(newName);
+            cohortRepository.save(cohort.get());
             return;
         }
         throw new CohortException("Cohort with " + cohortId + " does not exist!");
