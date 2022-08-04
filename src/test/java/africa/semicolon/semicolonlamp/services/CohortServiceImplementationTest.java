@@ -4,6 +4,9 @@ import africa.semicolon.semicolonlamp.models.Cohort;
 import africa.semicolon.semicolonlamp.models.CohortStatus;
 import africa.semicolon.semicolonlamp.repositories.CohortRepository;
 import africa.semicolon.semicolonlamp.request.CohortCreateRequest;
+import africa.semicolon.semicolonlamp.services.lampExceptions.CohortException;
+import africa.semicolon.semicolonlamp.services.lampExceptions.CohortStatusException;
+import africa.semicolon.semicolonlamp.services.lampExceptions.EmptyFieldException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -14,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -39,7 +43,34 @@ class CohortServiceImplementationTest {
     }
 
     @Test
-    void test
+    void testThatExceptionMessageIsThrownInMethodChangeCohortName() {
+        Cohort cohort = new Cohort();
+        cohort.setName("Avengers");
+        when(cohortRepository.findCohortById(cohort.getId())).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> cohortServiceImplementation.changeCohortName(cohort.getId(), cohort.getName()))
+                .isInstanceOf(CohortException.class)
+                .hasMessageContaining("Cohort with " + cohort.getId() + " does not exist!");
+    }
+
+    @Test
+    void testThatStatusExceptionMessageIsThrownInMethodUpdateCohortStatus() {
+        Cohort cohort = new Cohort();
+        String status = "Bread";
+        when(cohortRepository.findCohortById(cohort.getId())).thenReturn(Optional.of(cohort));
+        assertThatThrownBy(() -> cohortServiceImplementation.updateCohortStatus(cohort.getId(), status))
+                .isInstanceOf(CohortStatusException.class)
+                .hasMessageContaining("Oops " + status + " does not exist!");
+    }
+
+    @Test
+    void testThatCohortIdExceptionMessageIsThrownInMethodUpdateCohortStatus() {
+        Cohort cohort = new Cohort();
+        String status = "IN_SESSION";
+        when(cohortRepository.findCohortById(cohort.getId())).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> cohortServiceImplementation.updateCohortStatus(cohort.getId(), status))
+                .isInstanceOf(CohortException.class)
+                .hasMessageContaining("Cohort with " + cohort.getId() + " does not exist!");
+    }
 
 
     @Test
@@ -71,6 +102,15 @@ class CohortServiceImplementationTest {
     }
 
     @Test
+    void testThatExceptionIsThrownInMethodDeleteCohort() {
+        Cohort cohort = new Cohort();
+        when(cohortRepository.findCohortById(cohort.getId())).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> cohortServiceImplementation.deleteCohort(cohort.getId()))
+                .isInstanceOf(CohortException.class)
+                .hasMessageContaining("Cohort with " + cohort.getId() + " does not exist!");
+    }
+
+    @Test
     void tesThatAlCompletedCohortsCanBeGotten() {
         cohortServiceImplementation.getAllCompletedCohort();
         verify(cohortRepository).findCohortByStatus(CohortStatus.COMPLETED);
@@ -99,6 +139,26 @@ class CohortServiceImplementationTest {
     }
 
     @Test
+    void testThatEmptyFieldExceptionIsThrownInMethodCreateCohort() {
+        CohortCreateRequest request = new CohortCreateRequest();
+        request.setName("");
+        assertThatThrownBy(() -> cohortServiceImplementation.createCohort(request))
+                .isInstanceOf(EmptyFieldException.class)
+                .hasMessageContaining("Name field cannot be empty!");
+    }
+
+    @Test
+    void testThatCohortExceptionIsThrownInMethodCreateCohort() {
+        CohortCreateRequest request = new CohortCreateRequest();
+        Cohort cohort = new Cohort();
+        request.setName("Avengers");
+        when(cohortRepository.findCohortByName(request.getName())).thenReturn(Optional.of(cohort));
+        assertThatThrownBy(() -> cohortServiceImplementation.createCohort(request))
+                .isInstanceOf(CohortException.class)
+                .hasMessageContaining(request.getName() + " already exists!");
+    }
+
+    @Test
     void testThatACohortCanBeGotten() {
         Cohort cohort = new Cohort();
         String id = "1";
@@ -108,6 +168,16 @@ class CohortServiceImplementationTest {
         verify(cohortRepository).findCohortById(stringArgumentCaptor.capture());
         var capturedId = stringArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(id);
+    }
+
+    @Test
+    void testThatExceptionMessageInMethodGetCohortIsThrown() {
+        Cohort cohort = new Cohort();
+        when(cohortRepository.findCohortById(cohort.getId())).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> cohortServiceImplementation.getCohort(cohort.getId()))
+                .isInstanceOf(CohortException.class)
+                .hasMessage("Cohort with " + cohort.getId() + " does not exist!");
+
     }
 
     @Test
