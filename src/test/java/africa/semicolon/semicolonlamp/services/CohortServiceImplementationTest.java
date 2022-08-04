@@ -99,6 +99,7 @@ class CohortServiceImplementationTest {
         when(cohortRepository.findCohortById(cohort.getId())).thenReturn(Optional.of(cohort));
         cohortServiceImplementation.deleteCohort(cohort.getId());
         verify(cohortRepository).delete(cohort);
+        verify(cohortRepository, times(1)).delete(cohort);
     }
 
     @Test

@@ -169,6 +169,14 @@ class UserServiceImplementationTest {
         when(userRepository.findUserById(user.getId())).thenReturn(Optional.of(user));
         userServiceImplementation.deleteUser(user.getId());
         verify(userRepository).delete(user);
+        verify(userRepository, times(1)).delete(user);
+    }
+
+    @Test
+    void testThatExceptionMessageIsThrownInMethodDeleteUser() {
+        User user = new User();
+        when(userRepository.findUserById(user.getId())).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> userServiceImplementation.deleteUser(user.getId()));
     }
 
     @Test
