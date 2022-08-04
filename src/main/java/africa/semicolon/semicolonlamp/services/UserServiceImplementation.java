@@ -58,7 +58,7 @@ public class UserServiceImplementation implements UserService {
             userRepository.save(existingUser.get());
             return;
         }
-        throw new ExistingEmailException(request.getEmail() + " already exists!");
+        throw new ExistingEmailException(request.getEmail() + " does not exist!");
     }
 
     @Override

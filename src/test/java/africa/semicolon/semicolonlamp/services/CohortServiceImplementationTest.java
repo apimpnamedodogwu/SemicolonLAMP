@@ -26,7 +26,7 @@ class CohortServiceImplementationTest {
     CohortServiceImplementation cohortServiceImplementation;
 
     @Test
-    void changeCohortName() {
+    void testThatAcCohortNameCanBeChanged() {
         Cohort cohort = new Cohort();
         String name = "The Seven";
         when(cohortRepository.findCohortById(cohort.getId())).thenReturn(Optional.of(cohort));
@@ -39,7 +39,11 @@ class CohortServiceImplementationTest {
     }
 
     @Test
-    void updateCohortStatus() {
+    void test
+
+
+    @Test
+    void testThatCohortCanBeUpdated() {
         Cohort cohort = new Cohort();
         String status = "IN_SESSION";
         when(cohortRepository.findCohortById(cohort.getId())).thenReturn(Optional.of(cohort));
@@ -53,13 +57,13 @@ class CohortServiceImplementationTest {
     }
 
     @Test
-    void getAllInSessionCohorts() {
+    void testThatAllCohortsInSessionCanBeGotten() {
         cohortServiceImplementation.getAllInSessionCohorts();
         verify(cohortRepository).findCohortByStatus(CohortStatus.IN_SESSION);
     }
 
     @Test
-    void deleteCohort() {
+    void testThatCohortCanBeDeleted() {
         Cohort cohort = new Cohort();
         when(cohortRepository.findCohortById(cohort.getId())).thenReturn(Optional.of(cohort));
         cohortServiceImplementation.deleteCohort(cohort.getId());
@@ -67,19 +71,20 @@ class CohortServiceImplementationTest {
     }
 
     @Test
-    void getAllCompletedCohort() {
+    void tesThatAlCompletedCohortsCanBeGotten() {
         cohortServiceImplementation.getAllCompletedCohort();
         verify(cohortRepository).findCohortByStatus(CohortStatus.COMPLETED);
     }
 
     @Test
-    void getAllPendingCohort() {
+    void testThatAllPendingCohortsCanBeGotten() {
         cohortServiceImplementation.getAllPendingCohort();
         verify(cohortRepository).findCohortByStatus(CohortStatus.PENDING);
+
     }
 
     @Test
-    void createCohort() {
+    void testThatACohortCanBeCreated() {
         CohortCreateRequest request = new CohortCreateRequest();
         request.setName("Avengers");
         request.setLocalDate(request.getLocalDate());
@@ -94,14 +99,19 @@ class CohortServiceImplementationTest {
     }
 
     @Test
-    void getCohort() {
+    void testThatACohortCanBeGotten() {
         Cohort cohort = new Cohort();
-        when(cohortRepository.findCohortById(cohort.getId())).thenReturn(Optional.of(cohort));
-        cohortServiceImplementation.getCohort(cohort.getId());
+        String id = "1";
+        when(cohortRepository.findCohortById(id)).thenReturn(Optional.of(cohort));
+        cohortServiceImplementation.getCohort(id);
+        ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(cohortRepository).findCohortById(stringArgumentCaptor.capture());
+        var capturedId = stringArgumentCaptor.getValue();
+        assertThat(capturedId).isEqualTo(id);
     }
 
     @Test
-    void getAllCohorts() {
+    void testThatAllCohortsCanBeGotten() {
         cohortServiceImplementation.getAllCohorts();
         verify(cohortRepository).findAll();
     }
