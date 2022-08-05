@@ -11,7 +11,6 @@ import africa.semicolon.semicolonlamp.services.lampExceptions.CohortException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.ExistingEmailException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.InvalidUserIdException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.UserTypeException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -29,8 +28,7 @@ class UserServiceImplementationTest {
     UserRepository userRepository;
     @Mock
     CohortRepository cohortRepository;
-    @Mock
-    UserUpdateRequest userUpdateRequest;
+
     @InjectMocks
     UserServiceImplementation userServiceImplementation;
 
@@ -230,7 +228,7 @@ class UserServiceImplementationTest {
     }
 
     @Test
-    void testThatExceptionIsThrownInMethodCreateElder() {
+    void testThatExistingEmailExceptionIsThrownInMethodCreateElder() {
         UserRegistrationRequest request = new UserRegistrationRequest();
         User user = new User();
         request.setFirstName("Eden");

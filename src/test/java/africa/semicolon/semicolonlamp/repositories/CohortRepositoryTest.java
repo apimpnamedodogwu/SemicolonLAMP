@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+
 
 @DataMongoTest
 class CohortRepositoryTest {
@@ -33,6 +33,7 @@ class CohortRepositoryTest {
 
     @Test
     void testThatCohortCanBeFoundByStatus() {
+        cohortRepository.deleteAll();
         Cohort cohortOne = new Cohort();
         cohortOne.setName("Avengers");
         cohortOne.setStatus(CohortStatus.PENDING);
@@ -51,6 +52,7 @@ class CohortRepositoryTest {
         assertThat(firstList.size()).isEqualTo(2);
         assertThat(secondList.size()).isEqualTo(1);
         assertThat(thirdList.size()).isEqualTo(0);
+
 
     }
 
