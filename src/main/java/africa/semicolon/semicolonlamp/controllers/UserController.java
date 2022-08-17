@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PatchMapping("/change-user-type/{userId}/newType")
+    @PatchMapping("/change-user-type/{userId}/new-type")
     public ResponseEntity<?> changeUserType(@PathVariable String userId, @RequestParam String newType) {
         try {
             userService.changeUserType(userId, newType);
