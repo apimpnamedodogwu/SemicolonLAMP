@@ -1,6 +1,5 @@
 package africa.semicolon.semicolonlamp.request;
 
-import africa.semicolon.semicolonlamp.services.lampExceptions.EmptyFieldException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
