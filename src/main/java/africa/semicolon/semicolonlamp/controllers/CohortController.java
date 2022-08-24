@@ -19,7 +19,7 @@ public class CohortController {
     @Autowired
     CohortService cohortService;
 
-    @PatchMapping("/{cohortId}")
+    @PatchMapping("name/{cohortId}/")
     public ResponseEntity<?> changeCohortName(@PathVariable String cohortId, @RequestParam String newName) {
         try {
             cohortService.changeCohortName(cohortId, newName);
@@ -31,7 +31,7 @@ public class CohortController {
         }
     }
 
-    @PatchMapping("/{cohortId}")
+    @PatchMapping("status/{cohortId}")
     public ResponseEntity<?> updateCohortStatus(@PathVariable String cohortId, @RequestParam String newStatus) {
         try {
             cohortService.updateCohortStatus(cohortId, newStatus);
