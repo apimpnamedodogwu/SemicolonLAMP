@@ -11,6 +11,7 @@ import africa.semicolon.semicolonlamp.services.lampExceptions.CohortException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.ExistingEmailException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.InvalidUserIdException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.UserTypeException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,13 @@ import java.util.List;
 @Service
 public class UserServiceImplementation implements UserService {
 
+
     @Autowired
     UserRepository userRepository;
+    @Autowired
     CohortRepository cohortRepository;
+
+    ModelMapper modelMapper = new ModelMapper();
 
     private User validateUserId(String userId) {
         return userRepository.findUserById(userId).
@@ -52,9 +57,7 @@ public class UserServiceImplementation implements UserService {
         request.validateUserUpdateRequest(request);
         var existingUser = userRepository.findUserByEmail(request.getEmail());
         if (existingUser.isPresent()) {
-            existingUser.get().setFirstName(request.getFirstName());
-            existingUser.get().setLastName(request.getLastName());
-            existingUser.get().setEmail(request.getEmail());
+            modelMapper.map(existingUser.get(), request);
             userRepository.save(existingUser.get());
             return;
         }
@@ -114,10 +117,7 @@ public class UserServiceImplementation implements UserService {
             throw new ExistingEmailException(request.getEmail() + " already exists!");
         }
         User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        modelMapper.map(user, request);
         user.setUserType(UserType.NATIVE);
         userRepository.save(user);
     }
@@ -130,10 +130,7 @@ public class UserServiceImplementation implements UserService {
             throw new ExistingEmailException(request.getEmail() + " already exists!");
         }
         User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        modelMapper.map(user, request);
         user.setUserType(UserType.ELDER);
         userRepository.save(user);
     }
@@ -141,15 +138,12 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void createUserAncestor(UserRegistrationRequest request) {
         request.validateRegistrationRequest(request);
-        User user = new User();
         var existingEmail = userRepository.findUserByEmail(request.getEmail());
         if (existingEmail.isPresent()) {
             throw new ExistingEmailException(request.getEmail() + " already exists!");
         }
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        User user = new User();
+        modelMapper.map(user, request);
         user.setUserType(UserType.ANCESTOR);
         userRepository.save(user);
     }

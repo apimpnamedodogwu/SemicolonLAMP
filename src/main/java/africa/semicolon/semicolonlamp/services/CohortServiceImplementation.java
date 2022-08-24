@@ -7,6 +7,7 @@ import africa.semicolon.semicolonlamp.request.CohortCreateRequest;
 import africa.semicolon.semicolonlamp.services.lampExceptions.CohortException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.CohortStatusException;
 import africa.semicolon.semicolonlamp.services.lampExceptions.EmptyFieldException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class CohortServiceImplementation implements CohortService {
     @Autowired
     CohortRepository cohortRepository;
+    ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public void changeCohortName(String cohortId, String newName) {
@@ -79,9 +81,8 @@ public class CohortServiceImplementation implements CohortService {
             throw new CohortException(request.getName() + " already exists!");
         }
         Cohort cohort = new Cohort();
-        cohort.setName(request.getName());
+        modelMapper.map(cohort, request);
         cohort.setStatus(cohort.getStatus());
-        cohort.setLocalDate(request.getLocalDate());
         cohortRepository.save(cohort);
     }
 
