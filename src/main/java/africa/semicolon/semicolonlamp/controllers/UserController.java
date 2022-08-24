@@ -61,7 +61,7 @@ public class UserController {
         return new ResponseEntity<>(natives, HttpStatus.OK);
     }
 
-    @GetMapping("/users/cohort/{cohortId}")
+    @GetMapping("/cohort/{cohortId}")
     public ResponseEntity<?> getAllNativesInACohort(@PathVariable String cohortId) {
         try {
             var nativesInACohort = userService.getAllNativesInACohort(cohortId);
