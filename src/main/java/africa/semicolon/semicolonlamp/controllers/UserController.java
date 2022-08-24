@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PatchMapping("/change-user-type/{userId}/new-type")
+    @PatchMapping("/{userId}")
     public ResponseEntity<?> changeUserType(@PathVariable String userId, @RequestParam String newType) {
         try {
             userService.changeUserType(userId, newType);
@@ -31,7 +31,7 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/update-user-details/{userId}/request")
+    @PatchMapping("/{userId}")
     public ResponseEntity<?> updateUserDetails(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         try {
             userService.updateUserDetails(userId, request);
@@ -43,25 +43,25 @@ public class UserController {
         }
     }
 
-    @GetMapping("/get-all-elders")
+    @GetMapping("/elders")
     public ResponseEntity<?> getAllElders() {
         var elders = userService.getAllElders();
         return new ResponseEntity<>(elders, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-ancestors")
+    @GetMapping("/ancestors")
     public ResponseEntity<?> getAllAncestors() {
         var ancestors = userService.getAllAncestors();
         return new ResponseEntity<>(ancestors, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-natives")
+    @GetMapping("/natives")
     public ResponseEntity<?> getAllNatives() {
         var natives = userService.getAllNatives();
         return new ResponseEntity<>(natives, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-natives-in-a-cohort/{cohortId}")
+    @GetMapping("/{cohortId}")
     public ResponseEntity<?> getAllNativesInACohort(@PathVariable String cohortId) {
         try {
             var nativesInACohort = userService.getAllNativesInACohort(cohortId);
@@ -72,7 +72,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/get-a-user/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getUser(@PathVariable String userId) {
         try {
             var user = userService.getUser(userId);
@@ -83,13 +83,13 @@ public class UserController {
         }
     }
 
-    @GetMapping("/get-all-users")
+    @GetMapping("")
     public ResponseEntity<?> getAllUsers() {
         var users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping("/create-a-native/request")
+    @PostMapping("")
     public ResponseEntity<?> createANative(@RequestBody UserRegistrationRequest request) {
         try {
             userService.createUserNative(request);
@@ -101,7 +101,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/create-an-ancestor/request")
+    @PostMapping("")
     public ResponseEntity<?> createAnAncestor(@RequestBody UserRegistrationRequest request) {
         try {
             userService.createUserAncestor(request);
@@ -113,7 +113,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/create-an-elder/request")
+    @PostMapping("")
     public ResponseEntity<?> createAnElder(@RequestBody UserRegistrationRequest request) {
         try {
             userService.createUserElder(request);

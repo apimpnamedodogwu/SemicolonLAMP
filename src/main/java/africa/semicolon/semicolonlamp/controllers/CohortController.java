@@ -19,7 +19,7 @@ public class CohortController {
     @Autowired
     CohortService cohortService;
 
-    @PatchMapping("/edit-name/{cohortId}")
+    @PatchMapping("/{cohortId}")
     public ResponseEntity<?> changeCohortName(@PathVariable String cohortId, @RequestParam String newName) {
         try {
             cohortService.changeCohortName(cohortId, newName);
@@ -31,7 +31,7 @@ public class CohortController {
         }
     }
 
-    @PatchMapping("/update-cohort-status/{cohortId}")
+    @PatchMapping("/{cohortId}")
     public ResponseEntity<?> updateCohortStatus(@PathVariable String cohortId, @RequestParam String newStatus) {
         try {
             cohortService.updateCohortStatus(cohortId, newStatus);
@@ -43,13 +43,13 @@ public class CohortController {
         }
     }
 
-    @GetMapping("/all-in-session")
+    @GetMapping("/in-session")
     public ResponseEntity<?> getAllInSession() {
         var session = cohortService.getAllInSessionCohorts();
         return new ResponseEntity<>(session, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete-cohort/{cohortId}")
+    @DeleteMapping("/{cohortId}")
     public ResponseEntity<?> deleteCohort(@PathVariable String cohortId) {
         try {
             cohortService.deleteCohort(cohortId);
@@ -61,19 +61,19 @@ public class CohortController {
         }
     }
 
-    @GetMapping("/get-all-completed")
+    @GetMapping("/completed")
     public ResponseEntity<?> getAllCompleted() {
         var completed = cohortService.getAllCompletedCohort();
         return new ResponseEntity<>(completed, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-pending")
+    @GetMapping("/pending")
     public ResponseEntity<?> getAllPending() {
         var pending = cohortService.getAllPendingCohort();
         return new ResponseEntity<>(pending, HttpStatus.OK);
     }
 
-    @PostMapping("/create-cohort/request")
+    @PostMapping("")
     public ResponseEntity<?> createCohort(@RequestBody CohortCreateRequest request) {
         try {
             cohortService.createCohort(request);
@@ -85,7 +85,7 @@ public class CohortController {
         }
     }
 
-    @GetMapping("/get-cohort/{cohortId}")
+    @GetMapping("/{cohortId}")
     public ResponseEntity<?> getCohort(@PathVariable String cohortId) {
         try {
             var cohort = cohortService.getCohort(cohortId);
@@ -96,7 +96,7 @@ public class CohortController {
         }
     }
 
-    @GetMapping("/get-all-Cohorts")
+    @GetMapping("")
     public ResponseEntity<?> getAllCohorts() {
         var allCohorts = cohortService.getAllCohorts();
         return new ResponseEntity<>(allCohorts, HttpStatus.OK);

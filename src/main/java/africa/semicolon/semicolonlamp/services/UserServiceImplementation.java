@@ -146,7 +146,6 @@ public class UserServiceImplementation implements UserService {
         if (existingEmail.isPresent()) {
             throw new ExistingEmailException(request.getEmail() + " already exists!");
         }
-
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
