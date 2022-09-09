@@ -57,7 +57,7 @@ public class UserServiceImplementation implements UserService {
         request.validateUserUpdateRequest(request);
         var existingUser = userRepository.findUserByEmail(request.getEmail());
         if (existingUser.isPresent()) {
-            modelMapper.map(existingUser.get(), request);
+            modelMapper.map(request, existingUser.get());
             userRepository.save(existingUser.get());
             return;
         }
@@ -117,7 +117,7 @@ public class UserServiceImplementation implements UserService {
             throw new ExistingEmailException(request.getEmail() + " already exists!");
         }
         User user = new User();
-        modelMapper.map(user, request);
+        modelMapper.map(request, user);
         user.setUserType(UserType.NATIVE);
         userRepository.save(user);
     }
@@ -130,7 +130,7 @@ public class UserServiceImplementation implements UserService {
             throw new ExistingEmailException(request.getEmail() + " already exists!");
         }
         User user = new User();
-        modelMapper.map(user, request);
+        modelMapper.map(request, user);
         user.setUserType(UserType.ELDER);
         userRepository.save(user);
     }
@@ -143,7 +143,7 @@ public class UserServiceImplementation implements UserService {
             throw new ExistingEmailException(request.getEmail() + " already exists!");
         }
         User user = new User();
-        modelMapper.map(user, request);
+        modelMapper.map(request, user);
         user.setUserType(UserType.ANCESTOR);
         userRepository.save(user);
     }

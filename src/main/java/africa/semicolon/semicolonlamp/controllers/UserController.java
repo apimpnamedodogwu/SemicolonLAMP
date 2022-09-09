@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PatchMapping("/{userId}")
+    @PatchMapping("type/{userId}")
     public ResponseEntity<?> changeUserType(@PathVariable String userId, @RequestParam String newType) {
         try {
             userService.changeUserType(userId, newType);
@@ -31,7 +31,7 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/{userId}")
+    @PatchMapping("details/{userId}")
     public ResponseEntity<?> updateUserDetails(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         try {
             userService.updateUserDetails(userId, request);

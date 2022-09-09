@@ -81,7 +81,7 @@ public class CohortServiceImplementation implements CohortService {
             throw new CohortException(request.getName() + " already exists!");
         }
         Cohort cohort = new Cohort();
-        modelMapper.map(cohort, request);
+        modelMapper.map(request, cohort);
         cohort.setStatus(cohort.getStatus());
         cohortRepository.save(cohort);
     }
